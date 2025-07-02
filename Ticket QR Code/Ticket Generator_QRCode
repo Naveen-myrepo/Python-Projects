@@ -1,1 +1,45 @@
+import qrcode
+import re
+
+# 1. User input
+name = input("Enter your name: ")
+age = int(input("Enter your age: "))
+artist = input("Enter your favorite artist: ")
+
+# 2. Format data
+formatted_name = name.capitalize()
+reversed_artist = artist[::-1].upper()
+ticket_code = formatted_name[:3].upper() + str(age) + formatted_name[-2:].upper()
+
+# 3. Message formatting
+message = f"Hello {formatted_name}, we're thrilled to have you at the festival!\n" \
+          f"Your artist in reverse is: {reversed_artist}\n" \
+          f"Enjoy your day!\tSee you at Gate {age % 5 + 1}!\n"
+
+# 4. Ticket details for QR
+ticket_info = f"""
+MUSIC FESTIVAL TICKET
+---------------------
+Name: {formatted_name}
+Age: {age}
+Favorite Artist: {artist}
+Ticket Code: {ticket_code}
+"""
+
+# 5. QR Code Generation
+safe_name = re.sub(r'\W+', '', formatted_name)
+qr_filename = f"{safe_name}_ticket_qr.png"
+qr = qrcode.make(ticket_info)
+qr.save(qr_filename)
+
+# 6. Output Ticket
+print("\n\U0001F39B MUSIC FESTIVAL TICKET \U0001F39B")
+print("=" * 27)
+print(f"\nName: {formatted_name}")
+print(f"Age: {age}")
+print(f"Favorite Artist: {reversed_artist} (original: \"{artist}\")\n")
+print("Your customized message:\n" + message)
+print(f"Your Ticket Code: {ticket_code}")
+print(f"\n[\u2705] Your QR Code has been saved as '{qr_filename}'")
+print("\n" + "=" * 27)
 
